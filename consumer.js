@@ -17,7 +17,7 @@ async function consumer() {
     // Consumer for normal users
     channel.consume(N_queue, (m) => {
       if (m !== null) {
-        const msg = JSON.parse(m.content.toString());
+        const msg = JSON.parse(m);
         console.log("NORMAL user mail received:", msg);
         channel.ack(m);
       }
@@ -26,7 +26,7 @@ async function consumer() {
     // Consumer for subscribed users
     channel.consume(S_queue, (m) => {
       if (m !== null) {
-        const msg = JSON.parse(m.content.toString());
+        const msg = JSON.parse(m);
         console.log("SUBSCRIBED user mail received:", msg);
         channel.ack(m);
       }
