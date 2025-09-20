@@ -30,8 +30,8 @@ async function sendEmail() {
 
     // 3. Assert exchange & queues
     await channel.assertExchange(exchange, "direct", { durable:false });
-    await channel.assertQueue(N_queue, { durable: false});
-    await channel.assertQueue(S_queue, { durable: false});
+    await channel.assertQueue(N_queue, { durable:false});
+    await channel.assertQueue(S_queue, { durable:false});
 
     await channel.bindQueue(N_queue, exchange, N_user_routingKey);
     await channel.bindQueue(S_queue, exchange, S_user_routingKey);

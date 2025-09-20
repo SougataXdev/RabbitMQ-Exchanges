@@ -1,38 +1,33 @@
 import amqp from "amqplib";
 
+async function consumeQueue(queueName) {
+  const connection = await amqp.connect("amqp://localhost");
+  const channel = await connection.createChannel();
+
+  // Ensure queue exists
+  await channel.assertQueue(queueName, { durable: false });
+
+  console.log(`Waiting for messages in ${queueName}...`);
+
+  // Consume messages
+  await channel.consume(
+    queueName,
+    (msg) => {
+      if (msg !== null) {
+        const message = JSON.parse(msg.content.toString());
+        console.log(`${queueName} received:`, message);
+        channel.ack(msg);
+      }
+    },
+    { noAck: false }
+  );
+}
+
 async function consumer() {
   try {
-    const connection = await amqp.connect("amqp://localhost");
-    const channel = await connection.createChannel();
-
-    const N_queue = "N_mail-queue";
-    const S_queue = "S_mail-queue";
-
-    // Ensure both queues exist
-    await channel.assertQueue(N_queue, { durable: false });
-    await channel.assertQueue(S_queue, { durable: false });
-
-    console.log(`Waiting for messages in ${N_queue} and ${S_queue}...`);
-
-    // Consumer for normal users
-    channel.consume(N_queue, (m) => {
-      if (m !== null) {
-        const msg = JSON.parse(m);
-        console.log("NORMAL user mail received:", msg);
-        channel.ack(m);
-      }
-    });
-
-    // Consumer for subscribed users
-    channel.consume(S_queue, (m) => {
-      if (m !== null) {
-        const msg = JSON.parse(m);
-        console.log("SUBSCRIBED user mail received:", msg);
-        channel.ack(m);
-      }
-    });
+    await Promise.all([consumeQueue("N_mail-queue"), consumeQueue("S_mail-queue")]);
   } catch (error) {
-    console.error(error);
+    console.error("Error in consumer:", error);
   }
 }
 
