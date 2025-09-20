@@ -1,3 +1,24 @@
+/*
+ * DIRECT EXCHANGE - RabbitMQ
+ * 
+ * DEFINITION:
+ * A direct exchange routes messages to queues based on exact matching of routing keys.
+ * Messages are delivered to queues whose binding key exactly matches the message's 
+ * routing key, providing precise point-to-point message delivery.
+ * 
+ * KEY POINTS:
+ * • Exact routing key matching (no wildcards or pattern matching)
+ * • One-to-one or one-to-many routing based on identical binding keys
+ * • Simple and efficient for targeted message delivery
+ * • Default exchange type in RabbitMQ (unnamed exchange is direct)
+ * • Ideal for scenarios requiring specific message routing without complexity
+ * 
+ * REAL-WORLD APPLICATIONS:
+ * 1. TASK QUEUES: Route specific tasks to dedicated worker queues (e.g., "email", "sms", "push")
+ * 2. USER NOTIFICATIONS: Send messages to specific user channels (e.g., "user.123", "user.456")
+ * 3. SERVICE ROUTING: Direct API calls to specific microservices (e.g., "auth.service", "payment.service")
+ */
+
 import amqp from "amqplib";
 
 async function sendEmail() {

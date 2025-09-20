@@ -1,3 +1,24 @@
+/*
+ * TOPIC EXCHANGE - RabbitMQ
+ * 
+ * DEFINITION:
+ * A topic exchange routes messages to queues based on wildcard pattern matching 
+ * of routing keys. It provides flexible routing by allowing partial matches using 
+ * '*' (single word) and '#' (zero or more words) wildcards.
+ * 
+ * KEY POINTS:
+ * • Uses dot-separated routing keys (e.g., "user.payment.failed")
+ * • '*' matches exactly one word (e.g., "*.payment.*" matches "user.payment.success")
+ * • '#' matches zero or more words (e.g., "user.#" matches "user", "user.payment", "user.payment.failed")
+ * • Enables selective message consumption based on hierarchical patterns
+ * • More flexible than direct exchanges, more structured than fanout exchanges
+ * 
+ * REAL-WORLD APPLICATIONS:
+ * 1. LOGGING SYSTEMS: Route logs by severity and service (e.g., "error.auth.#", "warn.database.*")
+ * 2. NOTIFICATION SERVICES: Send notifications based on event types (e.g., "user.*.created", "order.#")
+ * 3. MICROSERVICES COMMUNICATION: Route events between services (e.g., "payment.success.*", "inventory.#")
+ */
+
 import amqp from "amqplib";
 
 async function produce(routingKey, message) {
